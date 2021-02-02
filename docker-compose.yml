@@ -1,0 +1,30 @@
+version: "3.9"
+services:
+  web:
+    build:
+      context: .
+      args:
+        - PORT=${PORT}
+        - READ_TIMEOUT=${READ_TIMEOUT}
+        - WRITE_TIMEOUT=${WRITE_TIMEOUT}
+    ports:
+      - "${PORT}:${PORT}"
+    environment:
+      - PORT=${PORT}
+      - TIMEOUT=${TIMEOUT}
+    networks:
+      - agenda-network
+    depends_on:
+      - "agenda_db"
+  agenda_db:
+    image: "mongo"
+    ports:
+      - "27017:27017"
+    volumes:
+      - "./db_data:/data/db"
+    networks:
+      - agenda-network
+
+networks: 
+    agenda-network:
+      driver: bridge
